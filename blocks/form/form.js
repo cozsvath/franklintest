@@ -118,14 +118,62 @@ function applyRules(form, rules) {
   });
 }
 
+function createJson (){
+  const res = Object();
+  res = {
+    0: {
+      Extra: "",
+      Field: "name",
+      Format: "",
+      Label: "Name",
+      Mandatory: "x",
+      Options: "",
+      Placeholder: "E.g. Buzz",
+      Rules: "",
+      Type: "text-field"
+    },
+    1: {
+      Extra:"",
+      Field: "question",
+      Format: "",
+      Label: "How can we help?",
+      Mandatory: "",
+      Options: "",
+      Placeholder: "",
+      Rules: "",
+      Type: "text-area"
+    },
+    2: {
+      Extra: "/thank-you",
+      Field: "submit",
+      Format: "",
+      Label: "Submit",
+      Mandatory: "",
+      Options: "",
+      Placeholder: "",
+      Rules: "",
+      Type: "submit"
+    }
+  }
+  return res;
+}
+
 async function createForm(formURL) {
   const { pathname } = new URL(formURL);
-  const resp = await fetch(pathname);
-  const json = await resp.json();
+  // disable reading data from spreadsheet - by cozsvath 
+  //const resp = await fetch(pathname);
+  //const json = await resp.json();
+  const json = {};
+  json[":type"] = "sheet";
+  json[limit] = 3;
+  json[offset] = 0;
+  json[total] = 3;
+  json[data] = createJson ();
   const form = document.createElement('form');
   const rules = [];
   // eslint-disable-next-line prefer-destructuring
   form.dataset.action = pathname.split('.json')[0];
+  // adding dataset  
   json.data.forEach((fd) => {
     fd.Type = fd.Type || 'text';
     const fieldWrapper = document.createElement('div');
